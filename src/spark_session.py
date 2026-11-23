@@ -12,7 +12,7 @@ def base_uri() -> str:
     return os.environ.get("DVF_BASE", f"s3a://{bucket()}/dvf")
 
 
-def get_spark(app_name: str) -> SparkSession:
+def get_spark(app_name: str, extra: dict | None = None) -> SparkSession:
     b = SparkSession.builder.appName(app_name).master(os.environ.get("SPARK_MASTER", "local[*]")).config("spark.sql.shuffle.partitions", os.environ.get("SPARK_SHUFFLE_PARTITIONS", "4"))
     if "AWS_S3_ENDPOINT" in os.environ:
         b = (
@@ -25,6 +25,8 @@ def get_spark(app_name: str) -> SparkSession:
             .config("spark.hadoop.fs.s3a.path.style.access", "true")
             .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
         )
+    for k, v in (extra or {}).items():
+        b = b.config(k, v)
     spark = b.getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
     return spark

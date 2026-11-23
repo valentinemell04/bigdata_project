@@ -39,7 +39,7 @@ spec:
           resources:
             requests:                             # petite demande : le cluster est souvent plein
               cpu: "250m"
-              memory: "1Gi"
+              memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "3Gi"
+              cpu: "1"
+              memory: "1536Mi"

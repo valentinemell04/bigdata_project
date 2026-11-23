@@ -1,0 +1,45 @@
+# Job Kubernetes : lance tout le pipeline (bronze -> silver -> gold -> vérification) dans un Pod
+# qui s'arrête une fois le travail terminé.
+# Ne pas appliquer ce fichier directement : k8s/run_job.sh remplace ${IMAGE} et ${REPO_URL}.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dvf-pipeline
+  labels:
+    app: dvf-pipeline
+spec:
+  backoffLimit: 1                  # une seule nouvelle tentative en cas d'échec
+  activeDeadlineSeconds: 1800      # abandon au bout de 30 minutes
+  ttlSecondsAfterFinished: 86400   # le Job et son Pod sont nettoyés 24 h après la fin
+  template:
+    metadata:
+      labels:
+        app: dvf-pipeline
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pipeline
+          image: ${IMAGE}           # la même image que le service vscode-pyspark (Python, Spark, Java, aws)
+          command: ["bash", "-c"]
+          args:
+            - |
+              set -euo pipefail
+              git clone --depth 1 ${REPO_URL} /tmp/projet
+              cd /tmp/projet
+              pip install --quiet duckdb
+              bash src/run_pipeline.sh
+          env:
+            - name: KUBERNETES_NAMESPACE          # le namespace du Pod, qui est aussi le nom du bucket
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            - secretRef:
+                name: dvf-s3-credentials          # clés S3 temporaires, créées par run_job.sh
+          resources:
+            requests:                             # petite demande : le cluster est souvent plein
+              cpu: "250m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "3Gi"

@@ -13,7 +13,7 @@ def base_uri() -> str:
 
 
 def get_spark(app_name: str) -> SparkSession:
-    b = SparkSession.builder.appName(app_name).master(os.environ.get("SPARK_MASTER", "local[*]"))
+    b = SparkSession.builder.appName(app_name).master(os.environ.get("SPARK_MASTER", "local[*]")).config("spark.sql.shuffle.partitions", os.environ.get("SPARK_SHUFFLE_PARTITIONS", "4"))
     if "AWS_S3_ENDPOINT" in os.environ:
         b = (
             b.config("spark.hadoop.fs.s3a.endpoint", f"https://{os.environ['AWS_S3_ENDPOINT']}")

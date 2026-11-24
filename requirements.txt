@@ -1,0 +1,3 @@
+# pyspark est fourni par l'image Onyxia vscode-pyspark (4.3.0) : pas besoin de l'installer ici.
+# pyspark>=4.1,<4.2 est installé a part, dans un venv dedie, pour le bonus Iceberg (voir src/06_run_iceberg.sh).
+duckdb

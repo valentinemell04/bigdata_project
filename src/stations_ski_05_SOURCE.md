@@ -9,3 +9,9 @@
   - La Forêt Blanche = Risoul + Vars. Voie lactée = côté français à Montgenèvre.
   - Le Dévoluy (domaine, Superdévoluy, La Joue du Loup) = commune nouvelle Dévoluy.
   - Ceillac et Abriès-Ristolas ne sont pas dans la catégorie : non retenues, pour s'en tenir à la source.
+
+## Limites de la liste
+
+- **Briançon exclue** de la liste malgré un domaine skiable qui touche la commune : voir le choix documenté ci-dessus (ville, pas une commune typique de station).
+- **Ceillac et Abriès-Ristolas absentes** : ces communes ont un domaine skiable mais ne figurent pas dans la catégorie Wikipédia source, donc non retenues.
+- **Catégorie datée de 2022** (révision du 13 juillet 2022) : la liste des 22 communes reflète l'état de la catégorie à cette date, pas une mise à jour 2024.

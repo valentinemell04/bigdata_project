@@ -14,9 +14,9 @@ dvf/raw/year=2024/dep=05/   (bronze, CSV brut)
 dvf/silver/ventes_appartements/   (Parquet, 1 ligne = 1 vente)
        |  03_gold.py   (+ dvf/ref/stations_ski_05.csv)
        v
-dvf/gold/prix_m2_par_tranche/   (resultat final)
+dvf/gold/prix_m2_par_tranche/   (résultat final)
        |
-       +--> 04_verify_duckdb.py   (recalcul independant depuis le CSV brut, comparaison)
+       +--> 04_verify_duckdb.py   (recalcul indépendant depuis le CSV brut, comparaison)
 ```
 
 ## Pipeline (`src/run_pipeline.sh`)

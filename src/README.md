@@ -2,6 +2,23 @@
 
 Détails qui ne tiennent pas dans le README (qui doit rester sur une page). Bucket S3 : `s3://<namespace>/dvf` (`user-v-mellone-ece` pour l'équipe).
 
+## Schéma du pipeline
+
+```text
+data.gouv.fr (CSV.gz)
+       |  01_ingest_raw.sh
+       v
+dvf/raw/year=2024/dep=05/   (bronze, CSV brut)
+       |  02_silver.py
+       v
+dvf/silver/ventes_appartements/   (Parquet, 1 ligne = 1 vente)
+       |  03_gold.py   (+ dvf/ref/stations_ski_05.csv)
+       v
+dvf/gold/prix_m2_par_tranche/   (resultat final)
+       |
+       +--> 04_verify_duckdb.py   (recalcul independant depuis le CSV brut, comparaison)
+```
+
 ## Pipeline (`src/run_pipeline.sh`)
 
 Lance `01` → `02` → `03` → `04` à la suite, depuis la racine du dépôt (`bash src/run_pipeline.sh`). Idempotent : chaque étape réécrit sa sortie en mode `overwrite`, donc relancer tout ou une partie du pipeline ne crée jamais de doublons et ne modifie jamais le brut sur S3. Le journal complet (stdout/stderr de l'exécution) est aussi déposé sur `dvf/logs/<nom_du_fichier>.log`, pour garder une trace même quand le Pod qui a tourné a disparu depuis.
